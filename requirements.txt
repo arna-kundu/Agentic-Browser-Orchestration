@@ -3,3 +3,4 @@ openai
 sounddevice
 keyboard
 numpy
+soundfile

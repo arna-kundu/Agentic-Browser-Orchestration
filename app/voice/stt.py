@@ -7,7 +7,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 from openai import OpenAI
 # from app.voice.microphone import record_audio
-from recorder import record_audio
+from app.voice.recorder import record_audio 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 load_dotenv(PROJECT_ROOT / ".env")
@@ -49,7 +49,7 @@ def main():
                 )
 
                 # Transcribe the exact file that was recorded
-            transcript = transcribe_audio(PROJECT_ROOT / "samples" / "microphone_input.wav")
+            transcript = transcribe_audio(audio_path)
             print("\n========== TRANSCRIPT ==========")
             print(transcript)
             print("================================")
