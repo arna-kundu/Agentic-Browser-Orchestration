@@ -6,6 +6,7 @@ from scipy.io.wavfile import write
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
+#OpenAI STT uses sample rate of 16kHz or 24kHz for the model 'gpt-4o-min-transcribe'
 SAMPLE_RATE = 16000
 DEFAULT_DURATION = 5
 

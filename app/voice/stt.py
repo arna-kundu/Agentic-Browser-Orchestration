@@ -6,8 +6,8 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 from openai import OpenAI
-from app.voice.microphone import record_audio
-
+# from app.voice.microphone import record_audio
+from recorder import record_audio
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 load_dotenv(PROJECT_ROOT / ".env")
@@ -35,34 +35,27 @@ def transcribe_audio(audio_path: str | Path) -> str:
         result = client.audio.transcriptions.create(
             model="gpt-4o-mini-transcribe",
             file=audio_file,
+            language="en"
         )
 
-    return result.text
+    return {'text':result.text, 'language':result.languages}
 
 
 def main():
-    parser = argparse.ArgumentParser(
-        description="Transcribe an audio file using OpenAI."
-    )
-    parser.add_argument(
-        "audio",
-        nargs="?",
-        default=str(PROJECT_ROOT / "samples" / "microphone_input.wav"),
-        help="Path to the audio file",
-    )
-    args = parser.parse_args()
-
     try:
-        
-        audio_path = record_audio(
-                output_path=PROJECT_ROOT / "samples" / "microphone_input.wav"
-            )
+        while True:
+            audio_path = record_audio(
+                    output_path=PROJECT_ROOT / "samples" / "microphone_input.wav"
+                )
 
-            # Transcribe the exact file that was recorded
-        transcript = transcribe_audio(audio_path)
-        print("\n========== TRANSCRIPT ==========")
-        print(transcript)
-        print("================================")
+                # Transcribe the exact file that was recorded
+            transcript = transcribe_audio(PROJECT_ROOT / "samples" / "microphone_input.wav")
+            print("\n========== TRANSCRIPT ==========")
+            print(transcript)
+            print("================================")
+            user_approval=input(f"User's query is:{transcript}. Should we proceed? ('yes' to proceed and 'no' to repeat the query)")
+            if user_approval=='yes':
+                break
 
     except Exception as error:
         print(f"Transcription error: {error}", file=sys.stderr)
