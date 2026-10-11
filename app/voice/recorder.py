@@ -7,13 +7,14 @@ import soundfile as sf
 SAMPLE_RATE=44100
 recording =[]
 
-def callback(indata, frames, status, time):
+def callback(indata, frames, time, status):
     if status:
         print(status)
     recording.append(indata.copy())
 
 def record_audio(output_path=f"../../samples/microphone_input.wav"):
     #record audio untill the user presses 'q'
+    recording.clear()
     with sd.InputStream(samplerate=SAMPLE_RATE, channels=1, dtype='float32', callback=callback):
         while not keyboard.is_pressed("q"):
             pass
